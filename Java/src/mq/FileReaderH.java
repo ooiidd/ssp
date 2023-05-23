@@ -1,9 +1,6 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+package mq;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,9 +72,9 @@ public class FileReaderH {
      * @param strList : 파일에 쓸 String의 List
      * @throws IOException
      */
-    public static void writeAll(String path,List<String> strList) throws IOException{
+    public static void writeAll(String path,List<String> strList, boolean append) throws IOException{
     	File file = new File(path);
-        FileWriter fileWriter = new FileWriter(file);
+        FileWriter fileWriter = new FileWriter(file, append);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
         int size = strList.size();
