@@ -16,7 +16,7 @@ public class MyServer {
 		http.setPort(8080);
 		server.addConnector(http);
 		ServletHandler servletHandler = new ServletHandler();
-		servletHandler.addServletWithMapping(MyServlet.class, "/helloworld");
+		servletHandler.addServletWithMapping(MyServlet.class, "/*");
 		server.setHandler(servletHandler);
 		server.start();
 		server.join();

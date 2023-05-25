@@ -1,3 +1,0 @@
-/front#Proxy-1.txt
-/auth#Service-B.txt
-/notice#Proxy-3.txt
