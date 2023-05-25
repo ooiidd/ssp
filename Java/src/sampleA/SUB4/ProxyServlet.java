@@ -39,7 +39,7 @@ public class ProxyServlet extends HttpServlet {
                 String headerName = ((String)headerNames.nextElement());
                 if(headerName.startsWith("x-")) {
                     request.header(headerName, req.getHeader(headerName));
-                    System.out.println(headerName+" "+req.getHeader(headerName));
+//                    System.out.println(headerName+" "+req.getHeader(headerName));
                 }
             }
             File file = new File("log.txt");
@@ -60,7 +60,7 @@ public class ProxyServlet extends HttpServlet {
 //            else{
 //                sb.append(url).append(path);
 //            }
-            request.header("x-prev",url+path);
+//            request.header("x-prev",url+path);
 //            System.out.println("log right : "+sb.append("\n").toString());
             String queryString = req.getQueryString();
 
@@ -78,17 +78,30 @@ public class ProxyServlet extends HttpServlet {
 
 
             request.header("x-requestTarget",url+path);
+            Date date = new Date();
+            int traceId = Objects.hashCode(date);;
+            request.getHeaders().remove("x-traceId");
+            request.header("x-traceId",String.valueOf(traceId));
+            int depth = 1;
+            if(req.getHeader("x-depth")!= null){
+                depth = Integer.parseInt(req.getHeader("x-depth"))+1;
+                request.getHeaders().remove("x-depth");
+            }
+            request.header("x-depth",String.valueOf(depth));
+            System.out.println("------"+"http://"+req.getLocalAddr()+":"+req.getLocalPort()+req.getPathInfo()+" "+url+path+" "+traceId +" "+
+                    req.getHeader("x-traceId") +" "+ req.getHeader("x-depth"));
+            System.out.println("++++++"+req.getHeader("x-prev")+" "+req.getHeader("x-requestTarget")+" "+req.getHeader("x-traceId"));
             contentRes = request
                     .send();
 
             Iterator<HttpField> iterator = contentRes.getHeaders().stream().iterator();
-            for (Iterator<HttpField> it = iterator; it.hasNext(); ) {
-                HttpField cur = it.next();
-                System.out.println("iter : "+cur.getName()+" "+cur.getValue());
-                if(cur.getName().startsWith("x-")){
-                    res.setHeader(cur.getName(),cur.getValue());
-                }
-            }
+//            for (Iterator<HttpField> it = iterator; it.hasNext(); ) {
+//                HttpField cur = it.next();
+////                System.out.println("iter : "+cur.getName()+" "+cur.getValue());
+//                if(cur.getName().startsWith("x-")){
+//                    res.setHeader(cur.getName(),cur.getValue());
+//                }
+//            }
 
             String requestId = contentRes.getHeaders().get("x-requestId");
 
@@ -98,7 +111,7 @@ public class ProxyServlet extends HttpServlet {
             FileReaderH.writeAll("log.txt",strList,true);
             res.setStatus(contentRes.getStatus());
 
-            System.out.println(url+path+" "+contentRes.getMediaType()+" "+contentRes.getStatus()+" "+queryString);
+//            System.out.println(url+path+" "+contentRes.getMediaType()+" "+contentRes.getStatus()+" "+queryString);
             res.setContentType(contentRes.getMediaType());
             res.getWriter().write(contentRes.getContentAsString());
             httpClient.stop();
