@@ -2,9 +2,11 @@ package hong;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Singleton {
-    private Map<String,String> urlMap = new HashMap<>();
+    private ConcurrentHashMap<String, AtomicInteger> countMap = new ConcurrentHashMap<>();
     private Singleton(){
     }
     public static Singleton getInstance(){
@@ -14,7 +16,7 @@ public class Singleton {
         private static final Singleton INSTANCE = new Singleton();
     }
 
-    public Map<String, String> getUrlMap() {
-        return urlMap;
+    public ConcurrentHashMap<String, AtomicInteger> getCountMap() {
+        return countMap;
     }
 }
