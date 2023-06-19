@@ -9,7 +9,7 @@ public class CounterHMain {
             }
             @Override
             public void run(){
-                CounterH counterH = new CounterH(str,2);
+                CounterH counterH = new CounterH(str,1);
                 try {
                     counterH.run();
                 } catch (InterruptedException e) {

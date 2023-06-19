@@ -14,7 +14,6 @@ public class CounterH {
     public void run() throws InterruptedException {
         ConcurrentHashMap<String, AtomicInteger> single = Singleton.getInstance().getCountMap();
         single.computeIfAbsent(name,(a)->{
-            System.out.println(Thread.currentThread().getName()+" not contains Key "+ name);
             return new AtomicInteger(0);
         });
 
@@ -22,7 +21,7 @@ public class CounterH {
         while(!executeYn.get()) {
             single.computeIfPresent(name, (key, val) -> {
                 if (val.get() >= count) {
-                    System.out.println(Thread.currentThread().getName() + " not execute : count is max " + name);
+//                    System.out.println(Thread.currentThread().getName() + " not execute : count is max " + name);
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
@@ -30,7 +29,7 @@ public class CounterH {
                     }
                 } else {
                     executeYn.set(true);
-                    System.out.println(val.addAndGet(1));
+//                    System.out.println(val.addAndGet(1));
                 }
                 return val;
             });
